@@ -5,9 +5,13 @@
             <input id="search" type="text" v-model="search">
         </form>
 
-
+        <div>
+            <p>
+                <span>{{ moviesFind }} </span> : film(s) trouvé
+            </p>
+        </div>
         <ul class="films">
-            <li v-for="(item, index) in films" :key="index" class="film card">
+            <li v-for="(item, index) in searchFilms" :key="index" class="film card">
               <img :src="item.poster" class="poster"/>
               <p class="title">
                 {{ item.title }}
@@ -33,40 +37,39 @@ export default ({
     data(){
         return {
             search: "",
-            searchFilms: []
+            searchFilms: [],
+            moviesFind: 0
         }
     },
 
-    props: {
-        films: Array
+    watch: {
+        search() {
+            this.searchFilmsSelection
+        }
     },
 
     computed:{
         searchFilmsSelection() {
-            this.searchFilms.push(this.films)
-            return this.searchFilms
+            this.searchFilms = this.$store.getters.getFilms(this.search)
+            this.moviesFind = this.searchFilms.length
         }
     },
 
     methods:{
         display(rating) {
-        let value = ''
-        switch(parseFloat(rating)){
-            case 0 >= 25:
-            value = '★'
-            break;
-            case 25 >= 50:
-            value = '★★'
-            break;
-            case 50 >= 75:
-            value = '★★★'
-            break;
-            case 75 >= 100:
-            value = '★★★★'
-            break;
-        }
-        console.log(value)
-        return value
+            let value = ''
+            if(parseFloat(rating) < 25) {
+                value = '★'
+            }else if(parseFloat(rating) < 50) {
+                value = '★★'
+            }else if(parseFloat(rating) < 75) {
+                value = '★★★'
+            }else if(parseFloat(rating) < 100) {
+                value = '★★★★'
+            }else if(parseFloat(rating) === 100) {
+                value = '★★★★★'
+            }
+            return value
         }
     }
 })

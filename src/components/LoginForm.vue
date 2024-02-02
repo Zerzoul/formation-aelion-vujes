@@ -39,7 +39,6 @@ export default {
     return {
       email: '',
       password:'',
-      loggedIn: false,
     }
   },
   props:{
@@ -48,8 +47,7 @@ export default {
   methods: {
     conected(){
       if(this.email === "email@bidon.fr" && this.password === "movie") {
-        this.loggedIn = true
-        this.$emit('loggedIn', this.loggedIn)
+        this.$emit('loggedIn', true)
       }
     },
   }
